@@ -1,0 +1,31 @@
+cron:
+- description: Spamhaus DROP
+  url: /jobs/shdropjob
+  schedule: every 12 hours
+- description: Spamhaus EDROP
+  url: /jobs/shedropjob
+  schedule: every 12 hours
+- description: Malware Domain List
+  url: /jobs/mdljob
+  schedule: every 12 hours
+- description: OpenBL
+  url: /jobs/openbljob
+  schedule: every 12 hours
+- description: Bruteforceblocker
+  url: /jobs/bruteforceblockerjob
+  schedule: every 12 hours
+- description: ET RBN
+  url: /jobs/etrbnjob
+  schedule: every 12 hours
+- description: ET TOR
+  url: /jobs/ettorjob
+  schedule: every 12 hours
+- description: ET Compromised
+  url: /jobs/etcompromisedjob
+  schedule: every 12 hours
+- description: Dshield Block List
+  url: /jobs/dshieldbljob
+  schedule: every 12 hours
+- description: SSL Abuse IP List
+  url: /jobs/sslabuseiplistjob
+  schedule: every 12 hours

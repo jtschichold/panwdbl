@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+    <head>
+		<title>panwdbl</title>
+		<style type="text/css">
+			body { font-size: 100%; font-family: 'Segoe UI', Tahoma, Helvetica, Arial, sans-serif; font-size: 13px; text-decoration: none; list-style: none; }
+			table { width: 100%; border-collapse: collapse; border-spacing: 0px; }
+			td { padding: 5px; padding-right: 10px; border: none; border-bottom: 1px solid #fff; background: #eee; vertical-align: top;}
+			#maindiv { padding: 10px; font-family: 'Segoe UI', Tahoma, Helvetica, Arial, sans-serif; width: 1000px; font-size: 12px; border: 1px solid #444; border-radius: 5px; }
+			hr { border: 0 none; border-bottom: 1px solid #444; }
+			td.desc { width: 50%; }
+			p { padding: 0; margin: 0; }
+		</style>
+    </head>
+    <body>
+    	<a href="https://github.com/jtschichold/panwdbl"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>
+		<div id="maindiv">
+			<table>
+				<tr>
+					<td><a href="/lists/shdrop.txt">Spamhaus DROP</a></td>
+					<td>{{ nSpamhausDROP }} entries</td>
+					<td>{{ dSpamhausDROP }}</td>
+					<td class="desc"><p>DROP (Don't Route Or Peer) and EDROP are advisory "drop all traffic" lists, consisting of stolen 'hijacked' netblocks and netblocks controlled entirely by criminals and professional spammers.<p>See <a href="http://www.spamhaus.org/drop/">http://www.spamhaus.org/drop/</a></td>
+				</tr>
+				<tr>
+					<td><a href="/lists/shedrop.txt">Spamhaus EDROP</a></td>
+					<td>{{ nSpamhausEDROP }} entries</td>
+					<td>{{ dSpamhausEDROP }}</td>
+					<td class="desc"><p>DROP (Don't Route Or Peer) and EDROP are advisory "drop all traffic" lists, consisting of stolen 'hijacked' netblocks and netblocks controlled entirely by criminals and professional spammers.<p>See <a href="http://www.spamhaus.org/drop/">http://www.spamhaus.org/drop/</a></td>
+				</tr>
+				<tr>
+					<td><a href="/lists/openbl.txt">OpenBL block list</a></td>
+					<td>{{ nOpenBLIpList }} entries</td>
+					<td>{{ dOpenBLIpList }}</td>
+					<td class="desc"><p>The OpenBL.org project (formerly known as the SSH blacklist) is about detecting, logging and reporting bruteforce attacks.<p>See <a href="http://www.openbl.org/">http://www.openbl.org/</a></td>
+				</tr>
+				<tr>
+					<td><a href="/lists/bruteforceblocker.txt">BruteForceBlocker</a></td>
+					<td>{{ nBruteForceBlockerList }} entries</td>
+					<td>{{ dBruteForceBlockerList }}</td>
+					<td class="desc">See <a href="http://danger.rulez.sk/index.php/bruteforceblocker/">http://danger.rulez.sk/index.php/bruteforceblocker/</a></td>
+				</tr>
+				<tr>
+					<td><a href="/lists/mdl.txt">Malware Domain List</a></td>
+					<td>{{ nMalwareDomainList }} entries</td>
+					<td>{{ dMalwareDomainList }}</td>
+					<td class="desc">See <a href="http://www.malwaredomainlist.com/">http://www.malwaredomainlist.com/</a></td>
+				</tr>
+				<tr>
+					<td><a href="/lists/etrbn.txt">Emerging Threats RBN</a></td>
+					<td>{{ nEmergingThreatsRBN }} entries</td>
+					<td>{{ dEmergingThreatsRBN }}</td>
+					<td class="desc"><p>From Emerging Threats RBN rules.<p>See <a href="http://doc.emergingthreats.net/bin/view/Main/RussianBusinessNetwork">http://doc.emergingthreats.net/bin/view/Main/RussianBusinessNetwork</a></td>
+				</tr>
+				<tr>
+					<td><a href="/lists/ettor.txt">Emerging Threats TOR</a></td>
+					<td>{{ nEmergingThreatsTOR }} entries</td>
+					<td>{{ dEmergingThreatsTOR }}</td>
+					<td class="desc"><p>Emerging Threats Tor rules.<p>See <a href="http://doc.emergingthreats.net/bin/view/Main/TorRules">http://doc.emergingthreats.net/bin/view/Main/TorRules</a></td>
+				</tr>
+				<tr>
+					<td><a href="/lists/etcompromised.txt">Emerging Threats Known Compromised Hosts</a></td>
+					<td>{{ nEmergingThreatsCompromisedList }} entries</td>
+					<td>{{ dEmergingThreatsCompromisedList }}</td>
+					<td class="desc">See <a href="http://doc.emergingthreats.net/bin/view/Main/CompromisedHost">http://doc.emergingthreats.net/bin/view/Main/CompromisedHost</a></td>
+				</tr>
+				<tr>
+					<td><a href="/lists/dshieldbl.txt">Dshield Recommended Block List</a></td>
+					<td>{{ nDshieldBlockList }} entries</td>
+					<td>{{ dDshieldBlockList }}</td>
+					<td class="desc"><p>DShield.org Recommended Block List.<p>See <a href="http://feeds.dshield.org/block.txt">http://feeds.dshield.org/block.txt</a></td>
+				</tr>
+				<tr>
+					<td><a href="/lists/sslabuseiplist.txt">SSL Abuse IP List</a></td>
+					<td>{{ nSSLAbuseIPList }} entries</td>
+					<td>{{ dSSLAbuseIPList }}</td>
+					<td class="desc"><p>SSLBL 30 days block list.<p>See <a href="https://sslbl.abuse.ch/blacklist/">SSL Blacklist </a></td>
+				</tr>
+			</table>
+		</div>
+		<p>The number of entries retrieved can be limited using the <i>n</i> argument in the URI: <a href="/lists/openbl.txt?n=20">first 20 entries of openbl</a></p>
+    </body>
+</html>
