@@ -373,9 +373,21 @@ class GetBlockList(webapp2.RequestHandler):
             if n < 0:
                 logging.error("Invalid value for n: %d", n)
                 n = len(iplist)
+        s = self.request.get('s', None)
+        if s is None:
+            s = 0
+        else:
+            try:
+                s = int(s)
+            except:
+                logging.error("Invalid value for s: %s", s)
+                s = 0
+            if s < 0:
+                logging.error("Invalid value for s: %s", s)
+                s = 0
 
         self.response.headers['Content-Type'] = 'text/plain'
-        self.response.write('\n'.join(iplist[:n]))  
+        self.response.write('\n'.join(iplist[s:s+n]))  
         
 class GetEmergingThreatsRBN(GetBlockList):
     tag = "EmergingThreatsRBN"
