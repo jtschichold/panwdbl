@@ -113,7 +113,7 @@ class NetAddress(Address):
         start, netmask = net.split('/')
         start = start.strip()
         netmask = netmask.strip()
-        netsize = (2<<(32-(int(netmask))))-1
+        netsize = (2<<(32-(int(netmask)-1)))-1
         av = address_to_value(start)
         end = value_to_address(av+netsize)
         Address.__init__(self, start, end)

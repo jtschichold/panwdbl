@@ -171,6 +171,15 @@ class SSLAbuseIPList(BlockListJob):
         net = line.split(",")[0]
         return address.create_address(net)
 
+class ZeusTrackerBadIPsList(BlockListJob):
+    url = "https://zeustracker.abuse.ch/blocklist.php?download=badips"
+    tag = "ZeusTrackerBadIPsList"
+    
+    def handle_line(self, line):
+        if line[0] == '#':
+            return None
+        return address.create_address(line)
+
 class Office365NetBlocks(webapp2.RequestHandler):
     """Not used, MS web page is unreliable"""
     url = "http://onlinehelp.microsoft.com/en-us/office365-enterprises/hh373144.aspx"
@@ -434,6 +443,9 @@ class GetSharepointOnlineNetBlocks(GetBlockList):
 class GetSSLAbuseIPList(GetBlockList):
     tag = "SSLAbuseIPList"
 
+class GetZeusTrackerBadIPsList(GetBlockList):
+    tag = "ZeusTrackerBadIPsList"
+
 class MainPage(webapp2.RequestHandler):
     """Main page renderer"""
     def __get_iplist_info(self, tag):
@@ -464,7 +476,8 @@ class MainPage(webapp2.RequestHandler):
                 "BruteForceBlockerList",
                 "EmergingThreatsTOR",
                 "DshieldBlockList",
-                "SSLAbuseIPList"]
+                "SSLAbuseIPList",
+                "ZeusTrackerBadIPsList"]
         template_values = {}
         
         for t in tags:
@@ -486,6 +499,7 @@ app = webapp2.WSGIApplication([('/', MainPage),
                                 ('/jobs/etcompromisedjob', EmergingThreatsCompromisedList),
                                 ('/jobs/dshieldbljob', DshieldBlockList),
                                 ('/jobs/sslabuseiplistjob', SSLAbuseIPList),
+                                ('/jobs/zeustrackerbadipsjob', ZeusTrackerBadIPsList),
                                 ('/lists/shdrop.txt', GetSpamhausDrop),
                                 ('/lists/shedrop.txt', GetSpamhausEDrop),
                                 ('/lists/mdl.txt', GetMalwareDomainList),
@@ -495,5 +509,6 @@ app = webapp2.WSGIApplication([('/', MainPage),
                                 ('/lists/ettor.txt', GetEmergingThreatsTOR),
                                 ('/lists/etcompromised.txt', GetEmergingThreatsCompromisedList),
                                 ('/lists/dshieldbl.txt', GetDshieldBlockList),
-                                ('/lists/sslabuseiplist.txt', GetSSLAbuseIPList)],
+                                ('/lists/sslabuseiplist.txt', GetSSLAbuseIPList),
+                                ('/lists/zeustrackerbadips.txt', GetZeusTrackerBadIPsList)],
                               debug=False)

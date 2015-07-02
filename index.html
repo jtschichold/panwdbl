@@ -76,8 +76,18 @@
 					<td>{{ dSSLAbuseIPList }}</td>
 					<td class="desc"><p>SSLBL 30 days block list.<p>See <a href="https://sslbl.abuse.ch/blacklist/">SSL Blacklist </a></td>
 				</tr>
+				<tr>
+					<td><a href="/lists/zeustrackerbadips.txt">Zeus Tracker Bad IPs List</a></td>
+					<td>{{ nZeusTrackerBadIPsList }} entries</td>
+					<td>{{ dZeusTrackerBadIPsList }}</td>
+					<td class="desc"><p>abuse.ch ZeuS IP blocklist "BadIPs" (excluding hijacked sites and free hosting providers).<p>See <a href="https://zeustracker.abuse.ch/blocklist.php">Zeus Tracker Block Lists </a></td>
+				</tr>
 			</table>
 		</div>
-		<p><b>Note:</b> The number of entries retrieved per list can be limited using the <i>n</i> argument in the URI. Example: first 20 entries of OpenBL <a href="/lists/openbl.txt?n=20">/lists/openbl.txt?n=20</a></p>
+		<b>Notes:</b> 
+		<ol>
+			<li>The number of entries retrieved per list can be limited using the <i>n</i> argument in the URI. Example: first 20 entries of OpenBL <a href="/lists/openbl.txt?n=20">/lists/openbl.txt?n=20</a></li>
+			<li>The starting entry can be specified using the <i>s</i> argument in the URI. Example: entries 20-40 of OpenBL <a href="/lists/openbl.txt?n=20&s=20">/lists/openbl.txt?n=20&s=20</a></li>
+		</ol>
     </body>
 </html>

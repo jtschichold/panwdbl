@@ -29,3 +29,6 @@ cron:
 - description: SSL Abuse IP List
   url: /jobs/sslabuseiplistjob
   schedule: every 12 hours
+- description: Zeus Tracker Bad IPs List
+  url: /jobs/zeustrackerbadipsjob
+  schedule: every 12 hours
