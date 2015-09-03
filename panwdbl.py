@@ -26,6 +26,7 @@ from google.appengine.api import memcache
 from google.appengine.api import urlfetch
 from google.appengine.ext import db
 import lxml.html
+import lxml.etree
 
 class BlockList(db.Model):
     """DB model of iplist"""
@@ -181,8 +182,8 @@ class ZeusTrackerBadIPsList(BlockListJob):
         return address.create_address(line)
 
 class Office365NetBlocks(webapp2.RequestHandler):
-    """Not used, MS web page is unreliable"""
-    url = "http://onlinehelp.microsoft.com/en-us/office365-enterprises/hh373144.aspx"
+    """Not used, MS web page is unreliable, includes ProPlus, Office Online and RCA"""
+    url = "https://support.content.office.net/en-us/static/O365IPAddresses.xml"
     tag = "Office365NetBlocks"
     
     def get(self):
@@ -192,28 +193,56 @@ class Office365NetBlocks(webapp2.RequestHandler):
             self.response.headers['Content-Type'] = 'text/plain'
             self.response.write(self.tag+" returned: "+str(blist.status_code))
             return
-        ltree = lxml.html.fromstring(page.content)
+        ltree = lxml.etree.fromstring(page.content)
 
         nets = set()
-        csnippets = ltree.find_class("LW_CodeSnippetContainerCode")
-        for cs in csnippets:
-            txtcs = cs.text_content()
-            for l in txtcs.splitlines():
-                l = l.strip()
-                if l == None or len(l) == 0:
-                    continue
-                if not l[0].isdigit():
-                    continue
-                addr = address.create_address(l)
-                if addr == None:
-                    continue
-                if type(addr) != types.ListType:
-                    addr = [addr]
-                for a in addr:
-                    if not a in nets:
-                        nets.add(a)
+
+        ipv4 = ltree.xpath("/products/product[@name='o365']/addresslist[@type='IPv4']/address")
+        for a in ipv4:
+            addr = address.create_address(a.text)
+            if addr == None:
+                continue
+            if type(addr) != types.ListType:
+                addr = [addr]
+            for a in addr:
+                if not a in nets:
+                    nets.add(a)
+
+        ipv4 = ltree.xpath("/products/product[@name='ProPlus']/addresslist[@type='IPv4']/address")
+        for a in ipv4:
+            addr = address.create_address(a.text)
+            if addr == None:
+                continue
+            if type(addr) != types.ListType:
+                addr = [addr]
+            for a in addr:
+                if not a in nets:
+                    nets.add(a)
+
+        ipv4 = ltree.xpath("/products/product[@name='RCA']/addresslist[@type='IPv4']/address")
+        for a in ipv4:
+            addr = address.create_address(a.text)
+            if addr == None:
+                continue
+            if type(addr) != types.ListType:
+                addr = [addr]
+            for a in addr:
+                if not a in nets:
+                    nets.add(a)
+
+        ipv4 = ltree.xpath("/products/product[@name='WAC']/addresslist[@type='IPv4']/address")
+        for a in ipv4:
+            addr = address.create_address(a.text)
+            if addr == None:
+                continue
+            if type(addr) != types.ListType:
+                addr = [addr]
+            for a in addr:
+                if not a in nets:
+                    nets.add(a)
+
         nets = address.optimize_list([ x for x in nets ])
-        
+
         self.response.headers['Content-Type'] = 'text/plain'
         self.response.write(self.tag+" list\n"+"# entries: "+str(len(nets))+"\n\n"+'\n'.join(map(repr, nets)))
         dblist = BlockList(tag=self.tag, iplist=map(repr, nets))
@@ -223,8 +252,8 @@ class Office365NetBlocks(webapp2.RequestHandler):
         logging.info(self.tag+" refreshed")
 
 class ExchangeOnlineNetBlocks(webapp2.RequestHandler):
-    """Not used, MS web page is unreliable"""
-    url = "http://help.outlook.com/en-gb/140/gg263350.aspx"
+    """Not used, MS web page is unreliable, includes Exchange Online Protection"""
+    url = "https://support.content.office.net/en-us/static/O365IPAddresses.xml"
     tag = "ExchangeOnlineNetBlocks"
     
     def get(self):
@@ -234,26 +263,31 @@ class ExchangeOnlineNetBlocks(webapp2.RequestHandler):
             self.response.headers['Content-Type'] = 'text/plain'
             self.response.write(self.tag+" returned: "+str(blist.status_code))
             return
-        ltree = lxml.html.fromstring(page.content)
+        ltree = lxml.etree.fromstring(page.content)
 
         nets = set()
-        csnippets = ltree.find_class("LW_CodeSnippetContainerCode")
-        for cs in csnippets:
-            txtcs = cs.text_content()
-            for l in txtcs.splitlines():
-                l = l.strip()
-                if l == None or len(l) == 0:
-                    continue
-                if not l[0].isdigit():
-                    continue
-                addr = address.create_address(l)
-                if addr == None:
-                    continue
-                if type(addr) != types.ListType:
-                    addr = [addr]
-                for a in addr:
-                    if not a in nets:
-                        nets.add(a)
+
+        ipv4 = ltree.xpath("/products/product[@name='EXO']/addresslist[@type='IPv4']/address")
+        for a in ipv4:
+            addr = address.create_address(a.text)
+            if addr == None:
+                continue
+            if type(addr) != types.ListType:
+                addr = [addr]
+            for a in addr:
+                if not a in nets:
+                    nets.add(a)
+
+        ipv4 = ltree.xpath("/products/product[@name='EOP']/addresslist[@type='IPv4']/address")
+        for a in ipv4:
+            addr = address.create_address(a.text)
+            if addr == None:
+                continue
+            if type(addr) != types.ListType:
+                addr = [addr]
+            for a in addr:
+                if not a in nets:
+                    nets.add(a)
         nets = address.optimize_list([ x for x in nets ])
         
         self.response.headers['Content-Type'] = 'text/plain'
@@ -265,8 +299,8 @@ class ExchangeOnlineNetBlocks(webapp2.RequestHandler):
         logging.info(self.tag+" refreshed")
 
 class LyncOnlineNetBlocks(webapp2.RequestHandler):
-    """Not used, MS web page is unreliable"""
-    url = "http://technet.microsoft.com/en-gb/library/hh372948.aspx"
+    """Not used, MS web page is unreliable, includes Skype for Business Online"""
+    url = "https://support.content.office.net/en-us/static/O365IPAddresses.xml"
     tag = "LyncOnlineNetBlocks"
     
     def get(self):
@@ -276,18 +310,13 @@ class LyncOnlineNetBlocks(webapp2.RequestHandler):
             self.response.headers['Content-Type'] = 'text/plain'
             self.response.write(self.tag+" returned: "+str(blist.status_code))
             return
-        ltree = lxml.html.fromstring(page.content)
+        ltree = lxml.etree.fromstring(page.content)
 
         nets = set()
-        listitems = ltree.cssselect("li")
-        for li in listitems:
-            l = li.text_content()
-            l = l.strip()
-            if l == None or len(l) == 0:
-                continue
-            if not l[0].isdigit():
-                continue
-            addr = address.create_address(l)
+
+        ipv4 = ltree.xpath("/products/product[@name='LYO']/addresslist[@type='IPv4']/address")
+        for a in ipv4:
+            addr = address.create_address(a.text)
             if addr == None:
                 continue
             if type(addr) != types.ListType:
@@ -307,7 +336,7 @@ class LyncOnlineNetBlocks(webapp2.RequestHandler):
 
 class SharepointOnlineNetBlocks(webapp2.RequestHandler):
     """Not used, MS web page is unreliable"""
-    url = "http://office.microsoft.com/en-001/office365-sharepoint-online-enterprise-help/sharepoint-online-urls-and-ip-addresses-HA102772748.aspx"
+    url = "https://support.content.office.net/en-us/static/O365IPAddresses.xml"
     tag = "SharepointOnlineNetBlocks"
     
     def get(self):
@@ -317,20 +346,13 @@ class SharepointOnlineNetBlocks(webapp2.RequestHandler):
             self.response.headers['Content-Type'] = 'text/plain'
             self.response.write(self.tag+" returned: "+str(blist.status_code))
             return
-        ltree = lxml.html.fromstring(page.content)
+        ltree = lxml.etree.fromstring(page.content)
 
         nets = set()
-        tdmain = ltree.cssselect("tr.trbgodd")[0][0]
-        logging.info("tdmain: "+tdmain.tag)
-        for p in tdmain:
-            logging.info("p: "+p.tag)
-            l = p.text_content()
-            l = l.strip()
-            if l == None or len(l) == 0:
-                continue
-            if not l[0].isdigit():
-                continue
-            addr = address.create_address(l)
+
+        ipv4 = ltree.xpath("/products/product[@name='SPO']/addresslist[@type='IPv4']/address")
+        for a in ipv4:
+            addr = address.create_address(a.text)
             if addr == None:
                 continue
             if type(addr) != types.ListType:
@@ -500,6 +522,10 @@ app = webapp2.WSGIApplication([('/', MainPage),
                                 ('/jobs/dshieldbljob', DshieldBlockList),
                                 ('/jobs/sslabuseiplistjob', SSLAbuseIPList),
                                 ('/jobs/zeustrackerbadipsjob', ZeusTrackerBadIPsList),
+                                ('/jobs/office365netblocksjob', Office365NetBlocks),
+                                ('/jobs/exchangeonlinenetblocksjob', ExchangeOnlineNetBlocks),
+                                ('/jobs/lynconlinenetblocksjob', LyncOnlineNetBlocks),
+                                ('/jobs/sharepointonlinenetblocksjob', SharepointOnlineNetBlocks),
                                 ('/lists/shdrop.txt', GetSpamhausDrop),
                                 ('/lists/shedrop.txt', GetSpamhausEDrop),
                                 ('/lists/mdl.txt', GetMalwareDomainList),
@@ -510,5 +536,10 @@ app = webapp2.WSGIApplication([('/', MainPage),
                                 ('/lists/etcompromised.txt', GetEmergingThreatsCompromisedList),
                                 ('/lists/dshieldbl.txt', GetDshieldBlockList),
                                 ('/lists/sslabuseiplist.txt', GetSSLAbuseIPList),
-                                ('/lists/zeustrackerbadips.txt', GetZeusTrackerBadIPsList)],
+                                ('/lists/zeustrackerbadips.txt', GetZeusTrackerBadIPsList),
+                                ('/lists/office365netblocks.txt', GetOffice365NetBlocks),
+                                ('/lists/exchangeonlinenetblocks.txt', GetExchangeOnlineNetBlocks),
+                                ('/lists/lynconlinenetblocks.txt', GetLyncOnlineNetBlocks),
+                                ('/lists/sharepointonlinenetblocks.txt', GetSharepointOnlineNetBlocks),
+                                ],
                               debug=False)

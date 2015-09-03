@@ -32,3 +32,15 @@ cron:
 - description: Zeus Tracker Bad IPs List
   url: /jobs/zeustrackerbadipsjob
   schedule: every 12 hours
+- description: Office365 Net Blocks
+  url: /jobs/office365netblocksjob
+  schedule: every 12 hours
+- description: Exchange Online Net Blocks
+  url: /jobs/exchangeonlinenetblocksjob
+  schedule: every 12 hours
+- description: Lync Online Net Blocks
+  url: /jobs/lynconlinenetblocksjob
+  schedule: every 12 hours
+- description: Sharepoint Online Net Blocks
+  url: /jobs/sharepointonlinenetblocksjob
+  schedule: every 12 hours
