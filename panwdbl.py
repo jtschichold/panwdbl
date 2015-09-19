@@ -181,6 +181,10 @@ class ZeusTrackerBadIPsList(BlockListJob):
             return None
         return address.create_address(line)
 
+class TalosIntelIPFilter(BlockListJob):
+    url = "http://talosintel.com/feeds/ip-filter.blf"
+    tag = "TalosIntelIPFilter"
+
 class Office365NetBlocks(webapp2.RequestHandler):
     """Not used, MS web page is unreliable, includes ProPlus, Office Online and RCA"""
     url = "https://support.content.office.net/en-us/static/O365IPAddresses.xml"
@@ -468,6 +472,9 @@ class GetSSLAbuseIPList(GetBlockList):
 class GetZeusTrackerBadIPsList(GetBlockList):
     tag = "ZeusTrackerBadIPsList"
 
+class GetTalosIntelIPFilter(GetBlockList):
+    tag = "TalosIntelIPFilter"
+
 class MainPage(webapp2.RequestHandler):
     """Main page renderer"""
     def __get_iplist_info(self, tag):
@@ -526,6 +533,7 @@ app = webapp2.WSGIApplication([('/', MainPage),
                                 ('/jobs/exchangeonlinenetblocksjob', ExchangeOnlineNetBlocks),
                                 ('/jobs/lynconlinenetblocksjob', LyncOnlineNetBlocks),
                                 ('/jobs/sharepointonlinenetblocksjob', SharepointOnlineNetBlocks),
+                                ('/jobs/talosintelipfilterjob', TalosIntelIPFilter),
                                 ('/lists/shdrop.txt', GetSpamhausDrop),
                                 ('/lists/shedrop.txt', GetSpamhausEDrop),
                                 ('/lists/mdl.txt', GetMalwareDomainList),
@@ -541,5 +549,6 @@ app = webapp2.WSGIApplication([('/', MainPage),
                                 ('/lists/exchangeonlinenetblocks.txt', GetExchangeOnlineNetBlocks),
                                 ('/lists/lynconlinenetblocks.txt', GetLyncOnlineNetBlocks),
                                 ('/lists/sharepointonlinenetblocks.txt', GetSharepointOnlineNetBlocks),
+                                ('/lists/talosintelipfilter.txt', GetTalosIntelIPFilter)
                                 ],
                               debug=False)
