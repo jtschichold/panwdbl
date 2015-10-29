@@ -1,10 +1,10 @@
 cron:
 - description: Spamhaus DROP
   url: /jobs/shdropjob
-  schedule: every 12 hours
+  schedule: every 1 hours
 - description: Spamhaus EDROP
   url: /jobs/shedropjob
-  schedule: every 12 hours
+  schedule: every 1 hours
 - description: Malware Domain List
   url: /jobs/mdljob
   schedule: every 12 hours

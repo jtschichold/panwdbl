@@ -377,24 +377,33 @@ class SharepointOnlineNetBlocks(webapp2.RequestHandler):
 class GetBlockList(webapp2.RequestHandler):
     """Base class for ip list retrive requests"""
     tag = "GetBlockListERROR"
+    copyright = None
+
     def __get_iplist(self):
         iplist = memcache.get("l"+self.tag)
         if iplist is not None:
-            return iplist
+            ipltime = memcache.get("t"+self.tag)
+            return ipltime, iplist
+
+        q = BlockList.all()
+        q.filter("tag =", self.tag)
+        q.order("-time")
+        iplist = q.get()
+
+        if iplist is None:
+            iplist = []
+            ipltime = None
         else:
-            q = BlockList.all()
-            q.filter("tag =", self.tag)
-            q.order("-time")
-            iplist = q.get()
-            if iplist == None:
-                iplist = []
-            else:
-                iplist = iplist.iplist
-            memcache.set("l"+self.tag, iplist, 60*60*24)
-            return iplist
+            iplist = iplist.iplist
+            ipltime = iplist.time.strftime('%d %b %Y %H:%M %Z')
+
+        memcache.set("l"+self.tag, iplist, 60*60*24)
+        memcache.set("t"+self.tag, ipltime, 60*60*24)
+
+        return ipltime, iplist
             
     def get(self):
-        iplist = self.__get_iplist()
+        ipltime, iplist = self.__get_iplist()
 
         n = self.request.get('n', None)
         if n is None:
@@ -422,15 +431,26 @@ class GetBlockList(webapp2.RequestHandler):
                 s = 0
 
         self.response.headers['Content-Type'] = 'text/plain'
+
+        if ipltime is not None or self.copyright is not None:
+            header = '#'
+            if self.copyright is not None:
+                header += ' '+self.copyright
+            if ipltime is not None:
+                header += ' Retrieved: %s'%ipltime
+            self.response.write('%s\n' % header)
+
         self.response.write('\n'.join(iplist[s:s+n]))  
         
 class GetEmergingThreatsRBN(GetBlockList):
     tag = "EmergingThreatsRBN"
     
 class GetSpamhausDrop(GetBlockList):
+    copyright = "Spamhaus DROP (c) Do not use after 2 days."
     tag = "SpamhausDROP"
         
 class GetSpamhausEDrop(GetBlockList):
+    copyright = "Spamhaus EDROP (c) Do not use after 2 days."
     tag = "SpamhausEDROP"
     
 class GetOpenBLIpList(GetBlockList):
