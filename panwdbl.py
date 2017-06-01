@@ -394,11 +394,11 @@ class GetBlockList(webapp2.RequestHandler):
             iplist = []
             ipltime = None
         else:
-            iplist = iplist.iplist
             ipltime = iplist.time.strftime('%d %b %Y %H:%M %Z')
+            iplist = iplist.iplist
 
-        memcache.set("l"+self.tag, iplist, 60*60*24)
         memcache.set("t"+self.tag, ipltime, 60*60*24)
+        memcache.set("l"+self.tag, iplist, 60*60*24)
 
         return ipltime, iplist
             
@@ -508,7 +508,7 @@ class MainPage(webapp2.RequestHandler):
             q.filter("tag =", tag)
             q.order("-time")
             iplist = q.get()
-            if iplist == None:
+            if iplist is None:
                 return '--', '--'
             else:
                 ipltime = iplist.time.strftime('%d %b %Y %H:%M %Z')
@@ -541,7 +541,7 @@ app = webapp2.WSGIApplication([('/', MainPage),
                                 ('/jobs/shdropjob', SpamhausDrop),
                                 ('/jobs/shedropjob', SpamhausEDrop),
                                 ('/jobs/mdljob', MalwareDomainList),
-                                ('/jobs/openbljob', OpenBLIpList),
+#                                ('/jobs/openbljob', OpenBLIpList),
                                 ('/jobs/bruteforceblockerjob', BruteForceBlockerList),
                                 ('/jobs/etrbnjob', EmergingThreatsRBN),
                                 ('/jobs/ettorjob', EmergingThreatsTOR),
@@ -557,7 +557,7 @@ app = webapp2.WSGIApplication([('/', MainPage),
                                 ('/lists/shdrop.txt', GetSpamhausDrop),
                                 ('/lists/shedrop.txt', GetSpamhausEDrop),
                                 ('/lists/mdl.txt', GetMalwareDomainList),
-                                ('/lists/openbl.txt', GetOpenBLIpList),
+#                                ('/lists/openbl.txt', GetOpenBLIpList),
                                 ('/lists/bruteforceblocker.txt', GetBruteForceBlockerList),
                                 ('/lists/etrbn.txt', GetEmergingThreatsRBN),
                                 ('/lists/ettor.txt', GetEmergingThreatsTOR),

@@ -8,9 +8,9 @@ cron:
 - description: Malware Domain List
   url: /jobs/mdljob
   schedule: every 12 hours
-- description: OpenBL
-  url: /jobs/openbljob
-  schedule: every 12 hours
+# - description: OpenBL
+#  url: /jobs/openbljob
+#  schedule: every 12 hours
 - description: Bruteforceblocker
   url: /jobs/bruteforceblockerjob
   schedule: every 12 hours
@@ -47,4 +47,3 @@ cron:
 - description: Talos Intel IP Filter
   url: /jobs/talosintelipfilterjob
   schedule: every 12 hours
-
