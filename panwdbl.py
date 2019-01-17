@@ -139,9 +139,16 @@ class SnortRules(BlockListJob):
             source = source.split(',')
         else:
             source = [source]
-        acs = address.create_address
-        return map(acs, source)
-        
+
+        result = []
+        for a in source:
+            try:
+                result.append(address.create_address(a))
+            except:
+                logging.exception('Error decoding: {!r}'.format(a))
+                pass
+        return result
+
 class EmergingThreatsRBN(SnortRules):
     url = "http://rules.emergingthreats.net/blockrules/emerging-rbn-BLOCK.rules"
     tag = "EmergingThreatsRBN"
@@ -193,9 +200,9 @@ class Office365NetBlocks(webapp2.RequestHandler):
     def get(self):
         page = urlfetch.fetch(self.url, deadline=60)
         if page.status_code != 200:
-            logging.error(self.tag+" returned: "+str(blist.status_code))
+            logging.error(self.tag+" returned: "+str(page.status_code))
             self.response.headers['Content-Type'] = 'text/plain'
-            self.response.write(self.tag+" returned: "+str(blist.status_code))
+            self.response.write(self.tag+" returned: "+str(page.status_code))
             return
         ltree = lxml.etree.fromstring(page.content)
 
@@ -263,9 +270,9 @@ class ExchangeOnlineNetBlocks(webapp2.RequestHandler):
     def get(self):
         page = urlfetch.fetch(self.url, deadline=60)
         if page.status_code != 200:
-            logging.error(self.tag+" returned: "+str(blist.status_code))
+            logging.error(self.tag+" returned: "+str(page.status_code))
             self.response.headers['Content-Type'] = 'text/plain'
-            self.response.write(self.tag+" returned: "+str(blist.status_code))
+            self.response.write(self.tag+" returned: "+str(page.status_code))
             return
         ltree = lxml.etree.fromstring(page.content)
 
@@ -310,9 +317,9 @@ class LyncOnlineNetBlocks(webapp2.RequestHandler):
     def get(self):
         page = urlfetch.fetch(self.url, deadline=60)
         if page.status_code != 200:
-            logging.error(self.tag+" returned: "+str(blist.status_code))
+            logging.error(self.tag+" returned: "+str(page.status_code))
             self.response.headers['Content-Type'] = 'text/plain'
-            self.response.write(self.tag+" returned: "+str(blist.status_code))
+            self.response.write(self.tag+" returned: "+str(page.status_code))
             return
         ltree = lxml.etree.fromstring(page.content)
 
@@ -346,9 +353,9 @@ class SharepointOnlineNetBlocks(webapp2.RequestHandler):
     def get(self):
         page = urlfetch.fetch(self.url, deadline=60)
         if page.status_code != 200:
-            logging.error(self.tag+" returned: "+str(blist.status_code))
+            logging.error(self.tag+" returned: "+str(page.status_code))
             self.response.headers['Content-Type'] = 'text/plain'
-            self.response.write(self.tag+" returned: "+str(blist.status_code))
+            self.response.write(self.tag+" returned: "+str(page.status_code))
             return
         ltree = lxml.etree.fromstring(page.content)
 
@@ -474,18 +481,6 @@ class GetDshieldBlockList(GetBlockList):
 class GetGoogleNetBlocks(GetBlockList):
     tag = "GoogleNetBlocks"
 
-class GetOffice365NetBlocks(GetBlockList):
-    tag = "Office365NetBlocks"
-        
-class GetLyncOnlineNetBlocks(GetBlockList):
-    tag = "LyncOnlineNetBlocks"
-
-class GetExchangeOnlineNetBlocks(GetBlockList):
-    tag = "ExchangeOnlineNetBlocks"
-
-class GetSharepointOnlineNetBlocks(GetBlockList):
-    tag = "SharepointOnlineNetBlocks"
-
 class GetSSLAbuseIPList(GetBlockList):
     tag = "SSLAbuseIPList"
 
@@ -549,10 +544,10 @@ app = webapp2.WSGIApplication([('/', MainPage),
                                 ('/jobs/dshieldbljob', DshieldBlockList),
                                 ('/jobs/sslabuseiplistjob', SSLAbuseIPList),
                                 ('/jobs/zeustrackerbadipsjob', ZeusTrackerBadIPsList),
-                                ('/jobs/office365netblocksjob', Office365NetBlocks),
-                                ('/jobs/exchangeonlinenetblocksjob', ExchangeOnlineNetBlocks),
-                                ('/jobs/lynconlinenetblocksjob', LyncOnlineNetBlocks),
-                                ('/jobs/sharepointonlinenetblocksjob', SharepointOnlineNetBlocks),
+                                # ('/jobs/office365netblocksjob', Office365NetBlocks),
+                                # ('/jobs/exchangeonlinenetblocksjob', ExchangeOnlineNetBlocks),
+                                # ('/jobs/lynconlinenetblocksjob', LyncOnlineNetBlocks),
+                                # ('/jobs/sharepointonlinenetblocksjob', SharepointOnlineNetBlocks),
                                 ('/jobs/talosintelipfilterjob', TalosIntelIPFilter),
                                 ('/lists/shdrop.txt', GetSpamhausDrop),
                                 ('/lists/shedrop.txt', GetSpamhausEDrop),
@@ -565,10 +560,10 @@ app = webapp2.WSGIApplication([('/', MainPage),
                                 ('/lists/dshieldbl.txt', GetDshieldBlockList),
                                 ('/lists/sslabuseiplist.txt', GetSSLAbuseIPList),
                                 ('/lists/zeustrackerbadips.txt', GetZeusTrackerBadIPsList),
-                                ('/lists/office365netblocks.txt', GetOffice365NetBlocks),
-                                ('/lists/exchangeonlinenetblocks.txt', GetExchangeOnlineNetBlocks),
-                                ('/lists/lynconlinenetblocks.txt', GetLyncOnlineNetBlocks),
-                                ('/lists/sharepointonlinenetblocks.txt', GetSharepointOnlineNetBlocks),
+                                # ('/lists/office365netblocks.txt', GetOffice365NetBlocks),
+                                # ('/lists/exchangeonlinenetblocks.txt', GetExchangeOnlineNetBlocks),
+                                # ('/lists/lynconlinenetblocks.txt', GetLyncOnlineNetBlocks),
+                                # ('/lists/sharepointonlinenetblocks.txt', GetSharepointOnlineNetBlocks),
                                 ('/lists/talosintelipfilter.txt', GetTalosIntelIPFilter)
                                 ],
                               debug=False)

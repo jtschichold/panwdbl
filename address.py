@@ -81,7 +81,7 @@ class Address:
             return Address(self.start, other.end)
         return None
         
-    def near(a):
+    def near(self, a):
         return (a.startvalue == self.endvalue+1)
         
     def __repr__(self):
